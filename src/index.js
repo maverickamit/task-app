@@ -38,6 +38,18 @@ app.post("/tasks", (req, res) => {
     });
 });
 
+// Reading User Endpoint
+//Getting a list of all Users
+app.get("/users", (req, res) => {
+  User.find({})
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((e) => {
+      res.status(500).send();
+    });
+});
+
 //Hashing Password
 
 const hashing = async () => {
