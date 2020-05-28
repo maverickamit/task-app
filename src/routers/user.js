@@ -8,7 +8,7 @@ router.post("/users", (req, res) => {
   user
     .save()
     .then((result) => {
-      res.status(201).send(user);
+      res.status(201).send(result);
     })
     .catch((err) => {
       res.status(400).send(err);
