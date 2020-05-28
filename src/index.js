@@ -40,6 +40,7 @@ app.post("/tasks", (req, res) => {
 
 // Reading User Endpoint
 //Getting a list of all Users
+
 app.get("/users", (req, res) => {
   User.find({})
     .then((users) => {
@@ -49,6 +50,22 @@ app.get("/users", (req, res) => {
       res.status(500).send();
     });
 });
+
+//Getting particular user details
+
+app.get("/users/:id", (req, res) => {
+  const _id = req.params.id;
+  User.findById(_id)
+    .then((user) => {
+      if (!user) {
+        res.status(404).send();
+      }
+      res.send(user);
+    })
+    .catch((e) => {
+      res.status(500).send();
+    });
+})  ;
 
 //Hashing Password
 
