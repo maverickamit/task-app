@@ -65,7 +65,36 @@ app.get("/users/:id", (req, res) => {
     .catch((e) => {
       res.status(500).send();
     });
-})  ;
+});
+
+// Reading Task Endpoint
+//Getting a list of all Tasks
+
+app.get("/tasks", (req, res) => {
+  Task.find({})
+    .then((tasks) => {
+      res.send(tasks);
+    })
+    .catch((e) => {
+      res.status(500).send();
+    });
+});
+
+//Getting particular task details
+
+app.get("/tasks/:id", (req, res) => {
+  const _id = req.params.id;
+  Task.findById(_id)
+    .then((task) => {
+      if (!task) {
+        res.status(404).send();
+      }
+      res.send(task);
+    })
+    .catch((e) => {
+      res.status(500).send();
+    });
+});
 
 //Hashing Password
 
