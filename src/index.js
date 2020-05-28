@@ -19,7 +19,7 @@ const hashing = async () => {
   const Password = "1234522";
   const hashedPassword = await bcrypt.hash(Password, 8);
   console.log(Password, hashedPassword);
-  const isMatch = await bcrypt.compare("Password", hashedPassword);
+  const isMatch = await bcrypt.compare(Password, hashedPassword);
   console.log(isMatch);
 };
 hashing();
