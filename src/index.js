@@ -96,7 +96,7 @@ app.get("/tasks/:id", (req, res) => {
     });
 });
 
-//Upding User details
+//Updating User details
 
 app.patch("/users/:id", async (req, res) => {
   const _id = req.params.id;
@@ -123,7 +123,7 @@ app.patch("/users/:id", async (req, res) => {
   }
 });
 
-//Upding Task details
+//Updating Task details
 
 app.patch("/tasks/:id", async (req, res) => {
   const _id = req.params.id;
@@ -141,6 +141,38 @@ app.patch("/tasks/:id", async (req, res) => {
       new: true,
       runValidators: true,
     });
+    if (!task) {
+      res.status(404).send();
+    }
+    res.send(task);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+//Deleting User
+
+app.delete("/users/:id", async (req, res) => {
+  const _id = req.params.id;
+
+  try {
+    const user = await User.findByIdAndDelete(_id);
+    if (!user) {
+      res.status(404).send();
+    }
+    res.send(user);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+//Deleting User
+
+app.delete("/tasks/:id", async (req, res) => {
+  const _id = req.params.id;
+
+  try {
+    const task = await Task.findByIdAndDelete(_id);
     if (!task) {
       res.status(404).send();
     }
