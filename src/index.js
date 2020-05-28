@@ -96,6 +96,26 @@ app.get("/tasks/:id", (req, res) => {
     });
 });
 
+//Upding User details
+
+app.patch("/users/:id", async (req, res) => {
+  const _id = req.params.id;
+  const body = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(_id, body, {
+      new: true,
+      runValidators: true,
+    }).then((user) => {
+      if (!user) {
+        res.status(404).send();
+      }
+      res.send(user);
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 //Hashing Password
 
 const hashing = async () => {
