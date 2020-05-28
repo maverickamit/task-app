@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  next();
+});
+
 const User = mongoose.model("User", userSchema);
 
 // const newUser = new User({
