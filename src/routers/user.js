@@ -93,4 +93,17 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
+//Endpoint for loggin in user
+
+router.post("/users/login", async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    res.send(user);
+  } catch {
+    res.status(404).send();
+  }
+});
 module.exports = router;
