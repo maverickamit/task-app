@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 8,
   },
+  tokens: [
+    {
+      token: { type: String, required: true },
+    },
+  ],
 });
 
 userSchema.statics.findByCredentials = async (email, password) => {
@@ -44,6 +49,9 @@ userSchema.methods.generateAuthToken = async function () {
   const token = jwt.sign({ _id: user._id.toString() }, "newprojectforme", {
     expiresIn: "7 days",
   });
+
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
   return token;
 };
 
