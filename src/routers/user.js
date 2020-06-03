@@ -3,8 +3,9 @@ const router = new express.Router();
 const User = require("../db/models/user");
 
 //Creating Users endpoint
-router.post("/users", (req, res) => {
+router.post("/users", async (req, res) => {
   const user = new User(req.body);
+  const token = await user.generateAuthToken();
   user
     .save()
     .then((result) => {
