@@ -101,7 +101,8 @@ router.post("/users/login", async (req, res) => {
       req.body.email,
       req.body.password
     );
-    res.send(user);
+    const token = await user.generateAuthToken();
+    res.status(200).send({ user, token });
   } catch {
     res.status(404).send();
   }

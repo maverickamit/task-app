@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const port = process.env.PORT || 3001;
 require("./db/mongoose");
@@ -13,16 +14,16 @@ app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
 
-//Hashing Password
+// JSON web token
 
-// const hashing = async () => {
-//   const Password = "1234522";
-//   const hashedPassword = await bcrypt.hash(Password, 8);
-//   console.log(Password, hashedPassword);
-//   const isMatch = await bcrypt.compare(Password, hashedPassword);
-//   console.log(isMatch);
-// };
-// hashing();
+const myfunction = async () => {
+  const token = jwt.sign({ _id: "abc123" }, "newprojectforme", {
+    expiresIn: "7 days",
+  });
+  // console.log(token);
+  console.log(jwt.verify(token, "newprojectforme"));
+};
+myfunction();
 
 //Serving the app on port 3000
 app.listen(port, () => {

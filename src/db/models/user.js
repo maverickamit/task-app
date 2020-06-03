@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
@@ -36,6 +37,14 @@ userSchema.statics.findByCredentials = async (email, password) => {
   }
 
   return user;
+};
+
+userSchema.methods.generateAuthToken = async function () {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, "newprojectforme", {
+    expiresIn: "7 days",
+  });
+  return token;
 };
 
 //Hash the plaintext password
