@@ -4,11 +4,21 @@ const jwt = require("jsonwebtoken");
 
 const port = process.env.PORT || 3001;
 require("./db/mongoose");
-const User = require("./db/models/user");
-const Task = require("./db/models/task");
+const User = require("./models/user");
+const Task = require("./models/task");
 const userRouter = require("./routers/user");
 const taskRouter = require("./routers/task");
 const app = express();
+
+// const mode = "maintenance";
+// // Middleware
+// app.use((req, res, next) => {
+//   if (mode === "maintenance") {
+//     res.status(503).send("Maintenance is going on. Please wait for a while.");
+//   } else {
+//     next();
+//   }
+// });
 
 app.use(express.json());
 app.use(userRouter);

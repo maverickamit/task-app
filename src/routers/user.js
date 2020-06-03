@@ -1,25 +1,24 @@
 const express = require("express");
 const router = new express.Router();
-const User = require("../db/models/user");
+const User = require("../models/user");
+const auth = require("../middleware/auth");
 
 //Creating Users endpoint
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
-  const token = await user.generateAuthToken();
-  user
-    .save()
-    .then((result) => {
-      res.status(201).send(result);
-    })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
+  try {
+    const token = await user.generateAuthToken();
+    await user.save();
+    res.status(201).send({ user, token });
+  } catch (err) {
+    res.status(400).send(err);
+  }
 });
 
 // Reading User Endpoint
 //Getting a list of all Users
 
-router.get("/users", (req, res) => {
+router.get("/users", auth, (req, res) => {
   User.find({})
     .then((users) => {
       res.send(users);
