@@ -18,14 +18,8 @@ router.post("/users", async (req, res) => {
 // Reading User Endpoint
 //Getting a list of all Users
 
-router.get("/users", auth, (req, res) => {
-  User.find({})
-    .then((users) => {
-      res.send(users);
-    })
-    .catch((e) => {
-      res.status(500).send();
-    });
+router.get("/users/me", auth, (req, res) => {
+  res.send(req.user);
 });
 
 //Getting particular user details
