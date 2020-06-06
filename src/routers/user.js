@@ -15,8 +15,37 @@ router.post("/users", async (req, res) => {
   }
 });
 
+//Endpoint for loggin in user
+
+router.post("/users/login", async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    const token = await user.generateAuthToken();
+    res.status(200).send({ user, token });
+  } catch {
+    res.status(404).send();
+  }
+});
+
+//Endpoint for loggin out user
+
+router.post("/users/logout", auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+    res.send();
+  } catch {
+    res.status(500).send();
+  }
+});
+
 // Reading User Endpoint
-//Getting a list of all Users
+//Getting user profile
 
 router.get("/users/me", auth, (req, res) => {
   res.send(req.user);
@@ -87,18 +116,4 @@ router.delete("/users/:id", async (req, res) => {
   }
 });
 
-//Endpoint for loggin in user
-
-router.post("/users/login", async (req, res) => {
-  try {
-    const user = await User.findByCredentials(
-      req.body.email,
-      req.body.password
-    );
-    const token = await user.generateAuthToken();
-    res.status(200).send({ user, token });
-  } catch {
-    res.status(404).send();
-  }
-});
 module.exports = router;
