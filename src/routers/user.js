@@ -30,13 +30,25 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-//Endpoint for loggin out user
+//Endpoint for loggin out user from single session
 
 router.post("/users/logout", auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
     });
+    await req.user.save();
+    res.send();
+  } catch {
+    res.status(500).send();
+  }
+});
+
+//Endpoint for loggin out user from all sessions
+
+router.post("/users/logoutAll", auth, async (req, res) => {
+  try {
+    req.user.tokens = [];
     await req.user.save();
     res.send();
   } catch {
