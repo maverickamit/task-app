@@ -81,8 +81,8 @@ router.get("/users/me", auth, (req, res) => {
 
 //Updating User details
 
-router.patch("/users/:id", async (req, res) => {
-  const _id = req.params.id;
+router.patch("/users/me", auth, async (req, res) => {
+  // const _id = req.user._id;
   const body = req.body;
   const allowedUpdates = ["name", "email", "password"];
   const updatesUsed = Object.keys(body);
@@ -97,7 +97,7 @@ router.patch("/users/:id", async (req, res) => {
     //   new: true,
     //   runValidators: true,
     // });
-    const user = await User.findById(_id);
+    const user = req.user;
     updatesUsed.forEach((update) => {
       user[update] = body[update];
     });
@@ -115,7 +115,7 @@ router.patch("/users/:id", async (req, res) => {
 //Deleting User
 
 router.delete("/users/me", auth, async (req, res) => {
-  const _id = req.user._id;
+  // const _id = req.user._id;
 
   try {
     await req.user.remove();
