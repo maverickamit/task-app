@@ -65,19 +65,19 @@ router.get("/users/me", auth, (req, res) => {
 
 //Getting particular user details
 
-router.get("/users/:id", (req, res) => {
-  const _id = req.params.id;
-  User.findById(_id)
-    .then((user) => {
-      if (!user) {
-        res.status(404).send();
-      }
-      res.send(user);
-    })
-    .catch((e) => {
-      res.status(500).send();
-    });
-});
+// router.get("/users/:id", (req, res) => {
+//   const _id = req.params.id;
+//   User.findById(_id)
+//     .then((user) => {
+//       if (!user) {
+//         res.status(404).send();
+//       }
+//       res.send(user);
+//     })
+//     .catch((e) => {
+//       res.status(500).send();
+//     });
+// });
 
 //Updating User details
 
@@ -114,14 +114,11 @@ router.patch("/users/:id", async (req, res) => {
 
 //Deleting User
 
-router.delete("/users/:id", async (req, res) => {
-  const _id = req.params.id;
+router.delete("/users/me", auth, async (req, res) => {
+  const _id = req.user._id;
 
   try {
-    const user = await User.findByIdAndDelete(_id);
-    if (!user) {
-      res.status(404).send();
-    }
+    await req.user.remove();
     res.send(user);
   } catch (e) {
     res.status(500).send(e);
