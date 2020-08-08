@@ -1,10 +1,16 @@
 const express = require("express");
 const router = new express.Router();
 const Task = require("../models/task");
+const auth = require("../middleware/auth");
+const { findOne } = require("../models/task");
 
 //Creating Tasks endpoint
-router.post("/tasks", (req, res) => {
-  const task = new Task(req.body);
+router.post("/tasks", auth, (req, res) => {
+  const task = new Task({
+    ...req.body,
+    owner: req.user._id,
+  });
+
   task
     .save()
     .then((result) => {
@@ -30,18 +36,23 @@ router.get("/tasks", (req, res) => {
 
 //Getting particular task details
 
-router.get("/tasks/:id", (req, res) => {
+router.get("/tasks/:id", auth, async (req, res) => {
   const _id = req.params.id;
-  Task.findById(_id)
-    .then((task) => {
-      if (!task) {
-        res.status(404).send();
-      }
-      res.send(task);
-    })
-    .catch((e) => {
-      res.status(500).send();
+
+  try {
+    const task = await findOne({
+      _id,
+      owner: req.user._id,
     });
+
+    if (!task) {
+      return res.status(404).send();
+    }
+
+    res.send(task);
+  } catch (e) {
+    res.status(500).send();
+  }
 });
 
 //Updating Task details
@@ -55,7 +66,9 @@ router.patch("/tasks/:id", async (req, res) => {
     return allowedUpdates.includes(update);
   });
   if (!isValidOperation) {
-    res.status(400).send({ error: "Invalid updates!" });
+    res.status(400).send({
+      error: "Invalid updates!",
+    });
   }
   try {
     const task = await Task.findByIdAndUpdate(_id);
