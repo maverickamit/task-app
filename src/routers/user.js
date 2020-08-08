@@ -9,7 +9,10 @@ router.post("/users", async (req, res) => {
   try {
     const token = await user.generateAuthToken();
     await user.save();
-    res.status(201).send({ user, token });
+    res.status(201).send({
+      user,
+      token
+    });
   } catch (err) {
     res.status(400).send(err);
   }
@@ -24,7 +27,10 @@ router.post("/users/login", async (req, res) => {
       req.body.password
     );
     const token = await user.generateAuthToken();
-    res.status(200).send({ user, token });
+    res.status(200).send({
+      user,
+      token
+    });
   } catch {
     res.status(404).send();
   }
@@ -90,7 +96,9 @@ router.patch("/users/me", auth, async (req, res) => {
     return allowedUpdates.includes(update);
   });
   if (!isValidOperation) {
-    res.status(400).send({ error: "Invalid updates!" });
+    res.status(400).send({
+      error: "Invalid updates!"
+    });
   }
   try {
     // const user = await User.findByIdAndUpdate(_id, body, {
@@ -119,7 +127,7 @@ router.delete("/users/me", auth, async (req, res) => {
 
   try {
     await req.user.remove();
-    res.send(user);
+    res.send(req.user);
   } catch (e) {
     res.status(500).send(e);
   }
