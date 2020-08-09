@@ -1,5 +1,6 @@
 const express = require("express");
 const router = new express.Router();
+const User = require("../models/user");
 const Task = require("../models/task");
 const auth = require("../middleware/auth");
 const { findOne } = require("../models/task");
@@ -24,14 +25,16 @@ router.post("/tasks", auth, (req, res) => {
 // Reading Task Endpoint
 //Getting a list of all Tasks
 
-router.get("/tasks", (req, res) => {
-  Task.find({})
-    .then((tasks) => {
-      res.send(tasks);
-    })
-    .catch((e) => {
-      res.status(500).send();
-    });
+router.get("/tasks", auth, async (req, res) => {
+  try {
+    await req.user.populate("tasks").execPopulate();
+    if (!req.user.tasks) {
+      return res.status(404).send();
+    }
+    res.send(req.user.tasks);
+  } catch (e) {
+    res.status(500).send();
+  }
 });
 
 //Getting particular task details
