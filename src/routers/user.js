@@ -1,5 +1,6 @@
 const express = require("express");
 const router = new express.Router();
+const multer = require("multer");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 
@@ -11,11 +12,18 @@ router.post("/users", async (req, res) => {
     await user.save();
     res.status(201).send({
       user,
-      token
+      token,
     });
   } catch (err) {
     res.status(400).send(err);
   }
+});
+
+//Endpoint for uploading profile picture
+
+const upload = multer({ dest: "avatars" });
+router.post("/users/me/avatar", upload.single("avatar"), (req, res) => {
+  res.send();
 });
 
 //Endpoint for loggin in user
@@ -29,7 +37,7 @@ router.post("/users/login", async (req, res) => {
     const token = await user.generateAuthToken();
     res.status(200).send({
       user,
-      token
+      token,
     });
   } catch {
     res.status(404).send();
@@ -97,7 +105,7 @@ router.patch("/users/me", auth, async (req, res) => {
   });
   if (!isValidOperation) {
     res.status(400).send({
-      error: "Invalid updates!"
+      error: "Invalid updates!",
     });
   }
   try {

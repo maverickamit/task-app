@@ -10,15 +10,11 @@ const userRouter = require("./routers/user");
 const taskRouter = require("./routers/task");
 const app = express();
 
-// const mode = "maintenance";
-// // Middleware
-// app.use((req, res, next) => {
-//   if (mode === "maintenance") {
-//     res.status(503).send("Maintenance is going on. Please wait for a while.");
-//   } else {
-//     next();
-//   }
-// });
+const multer = require("multer");
+const upload = multer({ dest: "images" });
+app.post("/upload", upload.single("upload"), (req, res) => {
+  res.send();
+});
 
 app.use(express.json());
 app.use(userRouter);
