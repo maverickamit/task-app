@@ -21,7 +21,20 @@ router.post("/users", async (req, res) => {
 
 //Endpoint for uploading profile picture
 
-const upload = multer();
+const upload = multer({
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, cb) {
+    // cb(new Error("File must be an image"));
+    // cb(undefined, true);
+    // cb(undefined, false);
+    if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
+      cb(new Error("File must be an image only"));
+    }
+    cb(undefined, true);
+  },
+});
 router.post(
   "/users/me/avatar",
   auth,
