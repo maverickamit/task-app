@@ -58,6 +58,22 @@ router.delete("/users/me/avatar", auth, async (req, res) => {
   res.send();
 });
 
+//Endpoint for getting an url for the avatar
+
+router.get("/users/:id/avatar", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user || !user.avatar) {
+      throw new Error();
+    }
+    res.set("Content-Type", "image/jpeg");
+    res.send(user.avatar);
+  } catch (e) {
+    res.status(404).send();
+  }
+});
+
 //Endpoint for loggin in user
 
 router.post("/users/login", async (req, res) => {
