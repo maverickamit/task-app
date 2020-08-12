@@ -21,10 +21,17 @@ router.post("/users", async (req, res) => {
 
 //Endpoint for uploading profile picture
 
-const upload = multer({ dest: "avatars" });
-router.post("/users/me/avatar", upload.single("avatar"), (req, res) => {
-  res.send();
-});
+const upload = multer();
+router.post(
+  "/users/me/avatar",
+  auth,
+  upload.single("avatar"),
+  async (req, res) => {
+    req.user.avatar = req.file.buffer;
+    await req.user.save();
+    res.send();
+  }
+);
 
 //Endpoint for loggin in user
 

@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema(
         token: { type: String, required: true },
       },
     ],
+    avatar: {
+      type: Buffer,
+    },
   },
   {
     timestamps: true,
