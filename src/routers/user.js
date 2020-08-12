@@ -33,6 +33,14 @@ router.post(
   }
 );
 
+//Endpoint for deleting profile picture
+
+router.delete("/users/me/avatar", auth, async (req, res) => {
+  req.user.avatar = undefined;
+  await req.user.save();
+  res.send();
+});
+
 //Endpoint for loggin in user
 
 router.post("/users/login", async (req, res) => {
