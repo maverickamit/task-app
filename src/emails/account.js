@@ -5,9 +5,16 @@ const sendWelcomeEmail = (email, name) => {
     to: email,
     from: "amitdgpghosh@gmail.com",
     subject: "Thanks for signing up!",
-    text: `Welcome to the app, ${name}!`,
-    html:
-      "<strong>Organize your tasks and increase your producitivity from anywhere!</strong>",
+    text: `Welcome to the task app, ${name}!`,
+  });
+};
+
+const sendCancelationEmail = (email, name) => {
+  sgMail.send({
+    to: email,
+    from: "amitdgpghosh@gmail.com",
+    subject: "Sorry to see you go.",
+    text: `Goodbye, ${name}.Hope to see you again soon.`,
   });
 };
 
