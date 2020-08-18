@@ -4,6 +4,7 @@ const multer = require("multer");
 const sharp = require("sharp");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
+const { sendWelcomeEmail } = require("../emails/account");
 
 //Creating Users endpoint
 router.post("/users", async (req, res) => {
@@ -11,6 +12,7 @@ router.post("/users", async (req, res) => {
   try {
     const token = await user.generateAuthToken();
     await user.save();
+    sendWelcomeEmail(user.email, user.name);
     res.status(201).send({
       user,
       token,
